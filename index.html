@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Rotating food truck schedule for taprooms across Ballard, Crown Hill, Greenwood and Broadview in NW Seattle.">
+<title>NW Seattle Food Truck Schedule</title>
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <img class="logo" src="assets/logo.png" alt="NW Seattle Food Truck Schedule logo" width="132" height="132">
+    <div class="brand-text">
+      <h1>NW Seattle Food Truck Schedule</h1>
+      <p class="tagline">Rotating food trucks at taprooms across Ballard, Crown Hill, Greenwood &amp; Broadview.</p>
+    </div>
+    <div class="wk-badge">
+      <span class="wk-label">This week</span>
+      <span class="wk-range"></span>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Views">
+    <button class="tab" role="tab" aria-selected="true" data-panel="week">📅 This Week</button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="month">🗓️ This Month</button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="nextmonth">⏩ Next Month</button>
+  </nav>
+
+  <section class="panel active" id="week" role="tabpanel">
+    <h2 class="sec"></h2>
+    <p class="sub"></p>
+  </section>
+
+  <section class="panel" id="month" role="tabpanel">
+    <h2 class="sec"></h2>
+    <p class="sub"></p>
+  </section>
+
+  <section class="panel" id="nextmonth" role="tabpanel">
+    <h2 class="sec"></h2>
+    <p class="sub"></p>
+  </section>
+
+  <section class="links-bar" aria-label="Live schedules and menus">
+    <h2 class="sec">Live schedules &amp; menus</h2>
+    <p class="sub">Tap a spot for its always-current truck lineup, taplist &amp; menus (opens in a new tab).</p>
+    <div class="links"></div>
+  </section>
+
+  <footer class="foot">
+    Refreshed weekly on Mondays from each taproom's published schedule, ballardfoodtrucks.com &amp; seattlefoodtruck.com.<br>
+    Trucks cancel or swap occasionally — the brewery links always show the real-time lineup.
+  </footer>
+</div>
+
+<script src="data/schedule.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
