@@ -6,7 +6,7 @@
  * Dates with no entry render as "no listing" automatically.
  */
 window.FOOD_TRUCKS = {
-  updated: '2026-09-07',
+  updated: '2026-09-15',
 
   locations: {
     stoup:  { tag: 'Stoup',       name: 'Stoup',                 url: 'https://www.stoupbrewing.com/ballard/' },
@@ -104,29 +104,52 @@ window.FOOD_TRUCKS = {
     ],
     '2026-09-15': [
       ['stoup', '🍔', "Max's Burgers & Wings", '5–8'],
-      ['urban', '🥙', "Georgia's Greek",       '4–8']
+      ['urban', '🥙', "Georgia's Greek",       '4–8'],
+      ['bbyc', '🌮', 'Birrieria Pepe El Toro', '4–8'],
+      ['chucks', '🍖', 'Woodshop BBQ',         '5–9'],
+      ['salehs', '🌯', 'Plaza Garcia Express', '5–9'],
+      ['broad', '🍜', 'Pumpkin Thai',           '4–8']
     ],
     '2026-09-16': [
       ['stoup', '🌮', 'El Gran Taco',       '4:30–8:30'],
-      ['urban', '🍗', 'Impeccable Chicken', '4–8']
+      ['urban', '🍗', 'Impeccable Chicken', '4–8'],
+      ['bbyc', '🥙', "Georgia's Greek",     '4–8'],
+      ['chucks', '🍕', "Oskar's Pizza",     '5–9'],
+      ['salehs', '🥙', "Theo's Gyros",      '5–9'],
+      ['broad', '🥟', 'MOMO Express',        '4–8']
     ],
     '2026-09-17': [
       ['stoup', '🌮', 'Birrieria Pepe El Toro', '4–8'],
-      ['urban', '🌮', 'Alebrijes',              '4–8']
+      ['urban', '🌮', 'Alebrijes',              '4–8'],
+      ['bbyc', '🍗', 'Impeckable Chicken',      '5–8'],
+      ['chucks', '🍗', 'Impeckable Chicken',    '5–9'],
+      ['salehs', '🍔', 'Burgerdom',              '5–9'],
+      ['broad', '🌯', 'Plaza Garcia Express',    '4–8']
     ],
     '2026-09-18': [
       ['stoup', '🍤', 'El Sabor Boricua', '5–9'],
-      ['urban', '🌮', 'Tacos and Beer',   '4–8']
+      ['urban', '🌮', 'Tacos and Beer',   '4–8'],
+      ['bbyc', '🫓', 'Paparepas',         '4–8'],
+      ['chucks', '🦐', 'Where Ya At Matt', '5–9'],
+      ['salehs', '🍗', 'Impeckable Chicken', '5–9'],
+      ['broad', '🍕', "Oskar's Pizza",     '4–8']
     ],
     '2026-09-19': [
       ['stoup', '🥪', "Tat's Truck",        '1–7'],
       ['urban', '🍕', "Oskar's Pizza",      '1–8'],
-      ['lucky', '🌭', 'Sea Dawgs Hot Dogs', '4:30–7:30']
+      ['bbyc', '🥙', "Georgia's Greek",      '1–8'],
+      ['lucky', '🍜', 'Kaosamai Thai',       '4:30–8'],
+      ['chucks', '🍤', 'Sabor Boricua',      '12–8'],
+      ['salehs', '🍕', "Oskar's Pizza",      '5–9'],
+      ['broad', '🌮', 'Off the Rez',         '4–8']
     ],
     '2026-09-20': [
       ['stoup', '🍜', 'Kaosamai Thai',          '1–7'],
       ['urban', '🍩', '9th and Hennepin',       '8a–12'],
-      ['urban', '🥪', 'Now Make Me A Sandwich', '1–7']
+      ['urban', '🥪', 'Now Make Me A Sandwich', '1–7'],
+      ['bbyc', '🌮', 'Tacos & Beer',             '1–8'],
+      ['chucks', '🌶️', 'Cocina Barelas',         '9a–12'],
+      ['chucks', '🥟', 'Momo Express',           '12–8']
     ],
     '2026-09-21': [
       ['stoup', '🍕', 'Russo Pizzarium',    '5–8'],
