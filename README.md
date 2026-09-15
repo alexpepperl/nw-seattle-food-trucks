@@ -22,7 +22,15 @@ Dates with no data render as "no listing".
 
 ## Weekly refresh
 
-Edit `data/schedule.js` only. Each date maps to a list of
+GitHub Actions refreshes the current week every Monday at 18:17 UTC. The updater
+checks each venue's published calendar, validates minimum coverage for every source
+and replaces the week only after all checks pass. If a source is unavailable or
+incomplete, it leaves the existing schedule untouched and opens a GitHub issue
+linking to the failed run.
+
+The workflow can also be started manually from the repository's **Actions** tab.
+
+For a manual correction, edit `data/schedule.js`. Each date maps to a list of
 `[locationKey, emoji, truckName, hours]` entries:
 
 ```js

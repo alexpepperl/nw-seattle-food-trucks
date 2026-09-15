@@ -1,0 +1,12 @@
+{
+  "name": "nw-seattle-food-trucks",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "refresh": "node scripts/refresh-schedule.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.55.0"
+  }
+}

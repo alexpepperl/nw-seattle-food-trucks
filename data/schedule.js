@@ -138,7 +138,7 @@ window.FOOD_TRUCKS = {
       ['stoup', '🥪', "Tat's Truck",        '1–7'],
       ['urban', '🍕', "Oskar's Pizza",      '1–8'],
       ['bbyc', '🥙', "Georgia's Greek",      '1–8'],
-      ['lucky', '🍜', 'Kaosamai Thai',       '4:30–8'],
+      ['lucky', '🌭', 'Sea Dawgs Hot Dogs',  '4:30–7:30'],
       ['chucks', '🍤', 'Sabor Boricua',      '12–8'],
       ['salehs', '🍕', "Oskar's Pizza",      '5–9'],
       ['broad', '🌮', 'Off the Rez',         '4–8']
