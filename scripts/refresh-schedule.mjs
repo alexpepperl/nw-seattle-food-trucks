@@ -113,7 +113,7 @@ export function parseSeattleFoodTruckCards(cards, location, year, weekDates) {
 }
 
 export function parseSeattleFoodTruckSchedule(text, location, year, weekDates) {
-  const schedule = text.split(/\nSchedule\n/i)[1]?.split(/\nPrevious week\n/i)[0];
+  const schedule = text.split(/(?:^|\n)Schedule\n/i)[1]?.split(/\nPrevious week\n/i)[0];
   if (!schedule) throw new Error(`${location} schedule section was not found`);
 
   const pattern = /(?:^|\n)([^\n]+)\n[^\n]+\n[^\n]+\n(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+([A-Za-z]+)\s+(\d{1,2})(?:st|nd|rd|th)\n(\d{1,2}(?::\d{2})?(?:am|pm))\s*(?:—|–|-)\s*(\d{1,2}(?::\d{2})?(?:am|pm))\nFood Truck\b/gi;
