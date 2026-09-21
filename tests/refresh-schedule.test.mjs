@@ -85,6 +85,21 @@ test("parses Lucky special-event food trucks", () => {
   assert.equal(parseLucky(text, 2026, week)[0].name, "Sea Dawgs Hot Dogs");
 });
 
+test("deduplicates Lucky trucks listed in both schedule sections", () => {
+  const text = `Special Event
+Friday, September 18, 2026
+Kaosamai Thai will be serving from 4:30–8:00 PM.
+View Event
+Food Truck Schedule
+Kaosamai
+Fri 9/18/26
+4:30pm–8:00pm
+Lucky Envelope Brewing`;
+  const results = parseLucky(text, 2026, week);
+  assert.equal(results.length, 1);
+  assert.equal(results[0].name, "Kaosamai Thai");
+});
+
 test("rejects partial source results", () => {
   assert.throws(() => validateResults({
     stoup: [], urban: [], bbyc: [], lucky: [], chucks: [], salehs: [], broad: []

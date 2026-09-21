@@ -169,14 +169,17 @@ export function parseLucky(text, year, weekDates) {
     const date = parseMonthDate(match[1], match[2], match[3]);
     if (!inWeek(date, weekDates)) continue;
     const sentence = match[4].match(/((?:[A-Z][A-Za-z0-9'’.-]*\s+){0,4}[A-Z][A-Za-z0-9'’.-]*)\s+(?:will be\s+)?(?:on-site\s+)?serving(?:\s+up)?(?:\s+[^.\n]+?)?\s+from\s+(\d{1,2}(?::\d{2})?)\s*(?:—|–|-)\s*(\d{1,2}(?::\d{2})?\s*(?:AM|PM))/i);
-    if (sentence) events.push(event("lucky", date, sentence[1], `${sentence[2]}–${sentence[3]}`));
+    if (sentence) {
+      const name = sentence[1].replace(/\s+will be$/i, "");
+      events.push(event("lucky", date, name, `${sentence[2]}–${sentence[3]}`));
+    }
   }
   return dedupe(events);
 }
 
 function dedupe(events) {
   const found = new Map();
-  for (const item of events) found.set(`${item.location}|${item.date}|${item.name}`, item);
+  for (const item of events) found.set(`${item.location}|${item.date}|${item.hours}`, item);
   return [...found.values()];
 }
 
