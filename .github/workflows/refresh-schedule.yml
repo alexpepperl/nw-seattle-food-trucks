@@ -42,7 +42,9 @@ jobs:
         run: npm test
 
       - name: Refresh all venue schedules
-        run: npm run refresh
+        run: |
+          set -o pipefail
+          npm run refresh 2>&1 | tee refresh.log
 
       - name: Commit complete schedule
         run: |
@@ -62,7 +64,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           title="Weekly food truck schedule refresh failed"
-          body="The automated Monday refresh failed and did not publish partial data. Review this run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          details="$(tail -n 30 refresh.log 2>/dev/null || true)"
+          body="$(printf 'The automated Monday refresh failed and did not publish partial data.\n\nRun: %s/%s/actions/runs/%s\n\n```\n%s\n```' "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" "$details")"
           issue="$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number')"
           if [ -n "$issue" ]; then
             gh issue comment "$issue" --body "$body"

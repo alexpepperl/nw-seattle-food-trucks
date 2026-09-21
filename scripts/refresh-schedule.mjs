@@ -177,10 +177,12 @@ async function scrapeAll(browser, weekDates, monday) {
   const year = monday.getFullYear();
   const results = {};
 
+  console.log(`Refreshing stoup from ${SOURCES.stoup}`);
   let page = await loadPage(browser, SOURCES.stoup, "FOOD TRUCK SCHEDULE");
   results.stoup = parseStoup(await page.locator("body").innerText(), year, weekDates);
   await page.close();
 
+  console.log(`Refreshing urban from ${SOURCES.urban}`);
   page = await loadPage(browser, SOURCES.urban, "Food Truck and Events Calendar");
   results.urban = await page.locator(".sugar-calendar-block__event-cell").evaluateAll((nodes) =>
     nodes.filter((node) => node.dataset.calendarsinfo?.includes("Food Truck Calendar")).map((node) => {
@@ -196,6 +198,7 @@ async function scrapeAll(browser, weekDates, monday) {
     .map((item) => event("urban", item.date, item.name, item.hours));
   await page.close();
 
+  console.log(`Refreshing bbyc from ${SOURCES.bbyc}`);
   const targetMonth = monday.toLocaleString("en-US", { month: "long" });
   page = await loadPage(browser, SOURCES.bbyc, targetMonth);
   const bbycRaw = await page.locator('[role="gridcell"]').evaluateAll((cells) => cells.flatMap((cell) => {
@@ -213,10 +216,12 @@ async function scrapeAll(browser, weekDates, monday) {
   ).filter((item) => inWeek(item.date, weekDates));
   await page.close();
 
+  console.log(`Refreshing lucky from ${SOURCES.lucky}`);
   page = await loadPage(browser, SOURCES.lucky, "Food Truck Schedule");
   results.lucky = parseLucky(await page.locator("body").innerText(), year, weekDates);
   await page.close();
 
+  console.log(`Refreshing chucks from ${SOURCES.chucks}`);
   page = await loadPage(browser, SOURCES.chucks);
   const calendarFrame = page.frames().find((frame) => frame.url().includes("calendar.google.com/calendar/embed"));
   if (!calendarFrame) throw new Error("Chuck's Google Calendar iframe was not found");
@@ -225,6 +230,7 @@ async function scrapeAll(browser, weekDates, monday) {
   await page.close();
 
   for (const location of ["salehs", "broad"]) {
+    console.log(`Refreshing ${location} from ${SOURCES[location]}`);
     page = await loadPage(browser, SOURCES[location], "Viewing week");
     await page.waitForFunction(() =>
       /(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+[A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)\s+\d{1,2}(?::\d{2})?(?:am|pm)\s*(?:—|–|-)\s*\d{1,2}(?::\d{2})?(?:am|pm)\s+Food Truck/i.test(document.body.innerText),
