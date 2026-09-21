@@ -28,6 +28,9 @@ and replaces the week only after all checks pass. If a source is unavailable or
 incomplete, it leaves the existing schedule untouched and opens a GitHub issue
 linking to the failed run.
 
+The refresh workflow also runs whenever its scraper or tests change, so parser fixes
+immediately republish the current week's complete schedule.
+
 The workflow can also be started manually from the repository's **Actions** tab.
 
 For a manual correction, edit `data/schedule.js`. Each date maps to a list of

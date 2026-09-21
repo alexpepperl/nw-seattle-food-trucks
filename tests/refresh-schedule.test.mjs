@@ -6,6 +6,7 @@ import {
   parseGoogleAgenda,
   parseLucky,
   parseSeattleFoodTruckCards,
+  parseSeattleFoodTruckSchedule,
   parseStoup,
   updateScheduleFile,
   validateResults
@@ -37,6 +38,23 @@ test("parses Chuck's Google Calendar agenda", () => {
 test("parses SeattleFoodTruck cards", () => {
   const card = "Pumpkin Thai\nBroadview Tap House\nEvent Date Tuesday, September 15th\nEvent Time 4:00pm - 8:00pm\nFood truck";
   assert.equal(parseSeattleFoodTruckCards([card], "broad", 2026, week)[0].date, "2026-09-15");
+});
+
+test("parses the current SeattleFoodTruck schedule layout", () => {
+  const text = `Schedule
+Plaza Garcia Express
+Saleh's
+2401 NW 80th St, Seattle
+Tuesday, September 15th
+5:00pm - 9:00pm
+Food Truck
+View Menu
+Previous week
+Viewing week of September 14th`;
+  assert.deepEqual(parseSeattleFoodTruckSchedule(text, "salehs", 2026, week)[0], {
+    location: "salehs", date: "2026-09-15", name: "Plaza Garcia Express",
+    hours: "5–9pm", emoji: "🚚"
+  });
 });
 
 test("parses Lucky special-event food trucks", () => {

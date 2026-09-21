@@ -112,6 +112,21 @@ export function parseSeattleFoodTruckCards(cards, location, year, weekDates) {
   }).filter((item) => inWeek(item.date, weekDates));
 }
 
+export function parseSeattleFoodTruckSchedule(text, location, year, weekDates) {
+  const schedule = text.split(/\nSchedule\n/i)[1]?.split(/\nPrevious week\n/i)[0];
+  if (!schedule) throw new Error(`${location} schedule section was not found`);
+
+  const pattern = /(?:^|\n)([^\n]+)\n[^\n]+\n[^\n]+\n(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+([A-Za-z]+)\s+(\d{1,2})(?:st|nd|rd|th)\n(\d{1,2}(?::\d{2})?(?:am|pm))\s*(?:—|–|-)\s*(\d{1,2}(?::\d{2})?(?:am|pm))\nFood Truck\b/gi;
+  return [...schedule.matchAll(pattern)]
+    .map((match) => event(
+      location,
+      parseMonthDate(match[2], match[3], year),
+      match[1],
+      `${match[4]}–${match[5]}`
+    ))
+    .filter((item) => inWeek(item.date, weekDates));
+}
+
 export function parseLucky(text, year, weekDates) {
   const events = [];
   const schedule = text.split("Food Truck Schedule")[1]?.split("Lucky Envelope Brewing")[0] ?? "";
@@ -211,8 +226,17 @@ async function scrapeAll(browser, weekDates, monday) {
 
   for (const location of ["salehs", "broad"]) {
     page = await loadPage(browser, SOURCES[location], "Viewing week");
-    const cards = await page.locator('a:has-text("Event Date"):has-text("Event Time")').allInnerTexts();
-    results[location] = parseSeattleFoodTruckCards(cards, location, year, weekDates);
+    await page.waitForFunction(() =>
+      /(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+[A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)\s+\d{1,2}(?::\d{2})?(?:am|pm)\s*(?:—|–|-)\s*\d{1,2}(?::\d{2})?(?:am|pm)\s+Food Truck/i.test(document.body.innerText),
+      null,
+      { timeout: 30_000 }
+    );
+    results[location] = parseSeattleFoodTruckSchedule(
+      await page.locator("body").innerText(),
+      location,
+      year,
+      weekDates
+    );
     await page.close();
   }
 
