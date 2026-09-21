@@ -185,8 +185,7 @@ window.FOOD_TRUCKS = {
       ['stoup', '🌮', 'Off the Rez', '5–9pm'],
       ['urban', '🌮', 'Birrieria Pepe El Toro', '4–8pm'],
       ['bbyc', '🍖', 'Wood Shop BBQ', '4–8pm'],
-      ['lucky', '🍜', 'Kaosamai', '4:30–8pm'],
-      ['lucky', '🍜', 'Kaosamai Thai will be', '4:30–8pm'],
+      ['lucky', '🍜', 'Kaosamai Thai', '4:30–8pm'],
       ['chucks', '🍤', 'Where ya at Matt', '5–9pm'],
       ['salehs', '🍗', 'Impeckable Chicken', '5–9pm'],
       ['broad', '🍕', 'Oskar\'s Pizza', '4–8pm']
