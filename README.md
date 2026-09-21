@@ -30,6 +30,8 @@ linking to the failed run.
 
 The refresh workflow also runs whenever its scraper or tests change, so parser fixes
 immediately republish the current week's complete schedule.
+Saleh's and Broadview are read from SeattleFoodTruck's JSON schedule endpoint because
+its browser-facing pages block GitHub-hosted automation.
 
 The workflow can also be started manually from the repository's **Actions** tab.
 

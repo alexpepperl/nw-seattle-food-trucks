@@ -6,6 +6,7 @@ import {
   parseGoogleAgenda,
   parseLucky,
   parseSeattleFoodTruckCards,
+  parseSeattleFoodTruckEvents,
   parseSeattleFoodTruckSchedule,
   parseStoup,
   updateScheduleFile,
@@ -52,6 +53,23 @@ View Menu
 Previous week
 Viewing week of September 14th`;
   assert.deepEqual(parseSeattleFoodTruckSchedule(text, "salehs", 2026, week)[0], {
+    location: "salehs", date: "2026-09-15", name: "Plaza Garcia Express",
+    hours: "5–9pm", emoji: "🚚"
+  });
+});
+
+test("parses SeattleFoodTruck API events", () => {
+  const payload = {
+    events: [{
+      start_time: "2026-09-15T17:00:00.000-07:00",
+      end_time: "2026-09-15T21:00:00.000-07:00",
+      bookings: [{
+        status: "approved",
+        truck: { name: "Plaza Garcia Express" }
+      }]
+    }]
+  };
+  assert.deepEqual(parseSeattleFoodTruckEvents(payload, "salehs", week)[0], {
     location: "salehs", date: "2026-09-15", name: "Plaza Garcia Express",
     hours: "5–9pm", emoji: "🚚"
   });

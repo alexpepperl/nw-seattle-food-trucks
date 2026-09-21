@@ -19,6 +19,7 @@ const SOURCES = {
   salehs: "https://www.seattlefoodtruck.com/schedule/salehs",
   broad: "https://www.seattlefoodtruck.com/schedule/broadview-tap-house"
 };
+const SEATTLE_FOOD_TRUCK_LOCATION_IDS = { salehs: 164, broad: 682 };
 
 function pad(value) {
   return String(value).padStart(2, "0");
@@ -127,6 +128,31 @@ export function parseSeattleFoodTruckSchedule(text, location, year, weekDates) {
     .filter((item) => inWeek(item.date, weekDates));
 }
 
+function formatApiTime(value) {
+  const match = value.match(/T(\d{2}):(\d{2})/);
+  if (!match) throw new Error(`Invalid SeattleFoodTruck event time: ${value}`);
+  const hour = Number(match[1]);
+  return `${hour % 12 || 12}${match[2] === "00" ? "" : `:${match[2]}`}${hour >= 12 ? "pm" : "am"}`;
+}
+
+export function parseSeattleFoodTruckEvents(payload, location, weekDates) {
+  if (!Array.isArray(payload?.events)) {
+    throw new Error(`${location} API response did not contain an events array`);
+  }
+  return payload.events.flatMap((item) => {
+    const date = item.start_time?.slice(0, 10);
+    if (!date || !item.end_time || !inWeek(date, weekDates)) return [];
+    return (item.bookings ?? [])
+      .filter((booking) => booking.status === "approved" && booking.truck?.name)
+      .map((booking) => event(
+        location,
+        date,
+        booking.truck.name,
+        `${formatApiTime(item.start_time)}–${formatApiTime(item.end_time)}`
+      ));
+  });
+}
+
 export function parseLucky(text, year, weekDates) {
   const events = [];
   const schedule = text.split("Food Truck Schedule")[1]?.split("Lucky Envelope Brewing")[0] ?? "";
@@ -171,6 +197,28 @@ async function loadPage(browser, url, readyText) {
     }
   }
   throw new Error(`Could not load ${url} after 3 attempts: ${lastError.message}`);
+}
+
+async function fetchJson(url) {
+  let lastError;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const response = await fetch(url, {
+        headers: { accept: "application/json", "user-agent": "nw-seattle-food-trucks" },
+        signal: AbortSignal.timeout(30_000)
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status} ${response.statusText}`);
+      return await response.json();
+    } catch (error) {
+      lastError = error;
+      if (attempt < 3) await new Promise((resolve) => setTimeout(resolve, attempt * 5_000));
+    }
+  }
+  throw new Error(`Could not load ${url} after 3 attempts: ${lastError.message}`);
+}
+
+function apiDate(date) {
+  return `${date.getMonth() + 1}-${date.getDate()}-${String(date.getFullYear()).slice(-2)}`;
 }
 
 async function scrapeAll(browser, weekDates, monday) {
@@ -230,20 +278,19 @@ async function scrapeAll(browser, weekDates, monday) {
   await page.close();
 
   for (const location of ["salehs", "broad"]) {
-    console.log(`Refreshing ${location} from ${SOURCES[location]}`);
-    page = await loadPage(browser, SOURCES[location], "Viewing week");
-    await page.waitForFunction(() =>
-      /(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+[A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)\s+\d{1,2}(?::\d{2})?(?:am|pm)\s*(?:—|–|-)\s*\d{1,2}(?::\d{2})?(?:am|pm)\s+Food Truck/i.test(document.body.innerText),
-      null,
-      { timeout: 30_000 }
-    );
-    results[location] = parseSeattleFoodTruckSchedule(
-      await page.locator("body").innerText(),
-      location,
-      year,
-      weekDates
-    );
-    await page.close();
+    const sunday = new Date(monday.getTime() + 6 * DAY_MS);
+    const params = new URLSearchParams({
+      with_active_trucks: "true",
+      page: "1",
+      page_size: "300",
+      start_date: apiDate(monday),
+      end_date: apiDate(sunday),
+      for_locations: String(SEATTLE_FOOD_TRUCK_LOCATION_IDS[location]),
+      include_bookings: "true"
+    });
+    const url = `https://www.seattlefoodtruck.com/api/events?${params}`;
+    console.log(`Refreshing ${location} from ${url}`);
+    results[location] = parseSeattleFoodTruckEvents(await fetchJson(url), location, weekDates);
   }
 
   return results;
