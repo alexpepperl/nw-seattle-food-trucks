@@ -98,7 +98,7 @@ export function parseGoogleAgenda(text, year, weekDates) {
     if (longDate) activeDate = parseMonthDate(longDate[1], longDate[2], year);
     if (!activeDate || !inWeek(activeDate, weekDates)) continue;
 
-    const details = chunk.match(/(\d{1,2}(?::\d{2})?\s*(?:am|pm)?)\s*(?:—|–|-)\s*(\d{1,2}(?::\d{2})?\s*(?:am|pm))\s*\n\d{1,2}(?::\d{2})?(?:am|pm)\s*\n(?:Dinner:\s*|Brunch:\s*)?([^\n]+)/i);
+    const details = chunk.match(/(\d{1,2}(?::\d{2})?\s*(?:am|pm)?)\s*(?:—|–|-)\s*(\d{1,2}(?::\d{2})?\s*(?:am|pm))\s*\n(?:\d{1,2}(?::\d{2})?(?:am|pm)\s*\n)?(?:Dinner:\s*|Brunch:\s*)?([^\n]+)/i);
     if (details) events.push(event("chucks", activeDate, details[3], `${details[1]}–${details[2]}`));
   }
   return events;

@@ -36,6 +36,11 @@ test("parses Chuck's Google Calendar agenda", () => {
   assert.equal(parseGoogleAgenda(text, 2026, week)[0].name, "Woodshop BBQ");
 });
 
+test("parses Chuck's direct Google Calendar agenda", () => {
+  const text = "15\nSEP, TUE\n5 – 9pm\nDinner: Woodshop BBQ\nChuck's 85th\nCalendar: Food Trucks-GW, Accepted";
+  assert.equal(parseGoogleAgenda(text, 2026, week)[0].name, "Woodshop BBQ");
+});
+
 test("parses SeattleFoodTruck cards", () => {
   const card = "Pumpkin Thai\nBroadview Tap House\nEvent Date Tuesday, September 15th\nEvent Time 4:00pm - 8:00pm\nFood truck";
   assert.equal(parseSeattleFoodTruckCards([card], "broad", 2026, week)[0].date, "2026-09-15");
