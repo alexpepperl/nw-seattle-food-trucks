@@ -20,6 +20,7 @@ const SOURCES = {
   broad: "https://www.seattlefoodtruck.com/schedule/broadview-tap-house"
 };
 const SEATTLE_FOOD_TRUCK_LOCATION_IDS = { salehs: 164, broad: 682 };
+const CHUCKS_CALENDAR_SOURCE = "https://calendar.google.com/calendar/embed?mode=AGENDA&showNav=0&showDate=0&showPrint=0&showTabs=0&showTz=0&showCalendars=0&showTitle=0&height=600&wkst=1&bgcolor=%23FFFFFF&src=tihhbg3gp215ruuo0nsp3qafgs%40group.calendar.google.com&color=%238C500B&ctz=America%2FLos_Angeles";
 
 function pad(value) {
   return String(value).padStart(2, "0");
@@ -269,14 +270,9 @@ async function scrapeAll(browser, weekDates, monday) {
   results.lucky = parseLucky(await page.locator("body").innerText(), year, weekDates);
   await page.close();
 
-  console.log(`Refreshing chucks from ${SOURCES.chucks}`);
-  page = await loadPage(browser, SOURCES.chucks);
-  const calendarFrame = page.frames().find((frame) => frame.url().includes("calendar.google.com/calendar/embed"));
-  if (!calendarFrame) throw new Error("Chuck's Google Calendar iframe was not found");
-  await calendarFrame.locator("body").waitFor({ state: "visible", timeout: 30_000 });
-  await calendarFrame.getByText("Calendar: Food Trucks-GW, Accepted", { exact: false })
-    .first().waitFor({ timeout: 30_000 });
-  const chucksText = await calendarFrame.locator("body").innerText();
+  console.log(`Refreshing chucks from ${CHUCKS_CALENDAR_SOURCE}`);
+  page = await loadPage(browser, CHUCKS_CALENDAR_SOURCE, "Calendar: Food Trucks-GW, Accepted");
+  const chucksText = await page.locator("body").innerText();
   results.chucks = parseGoogleAgenda(chucksText, year, weekDates);
   if (!results.chucks.length) {
     throw new Error(`Chuck's calendar loaded but no events parsed:\n${chucksText.slice(0, 2_000)}`);
