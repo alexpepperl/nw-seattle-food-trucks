@@ -274,7 +274,13 @@ async function scrapeAll(browser, weekDates, monday) {
   const calendarFrame = page.frames().find((frame) => frame.url().includes("calendar.google.com/calendar/embed"));
   if (!calendarFrame) throw new Error("Chuck's Google Calendar iframe was not found");
   await calendarFrame.locator("body").waitFor({ state: "visible", timeout: 30_000 });
-  results.chucks = parseGoogleAgenda(await calendarFrame.locator("body").innerText(), year, weekDates);
+  await calendarFrame.getByText("Calendar: Food Trucks-GW, Accepted", { exact: false })
+    .first().waitFor({ timeout: 30_000 });
+  const chucksText = await calendarFrame.locator("body").innerText();
+  results.chucks = parseGoogleAgenda(chucksText, year, weekDates);
+  if (!results.chucks.length) {
+    throw new Error(`Chuck's calendar loaded but no events parsed:\n${chucksText.slice(0, 2_000)}`);
+  }
   await page.close();
 
   for (const location of ["salehs", "broad"]) {
