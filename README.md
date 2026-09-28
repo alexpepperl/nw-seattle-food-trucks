@@ -22,11 +22,14 @@ Dates with no data render as "no listing".
 
 ## Weekly refresh
 
-GitHub Actions refreshes the current week every Monday at 18:17 UTC. The updater
-checks each venue's published calendar, validates minimum coverage for every source
-and replaces the week only after all checks pass. If a source is unavailable or
-incomplete, it leaves the existing schedule untouched and opens a GitHub issue
-linking to the failed run.
+GitHub Actions refreshes the current week every day at 18:17 UTC, so a transient
+source failure is retried automatically rather than leaving the schedule stale for
+the rest of the week. The updater loads every venue's published calendar (including
+both months when a week crosses a month boundary), validates a plausible result from
+every source and replaces the week only after all checks pass. If a source is
+unavailable or incomplete, it leaves the existing schedule untouched and opens a
+GitHub issue linking to the failed run. The issue closes automatically after a later
+full refresh succeeds.
 
 The refresh workflow also runs whenever its scraper or tests change, so parser fixes
 immediately republish the current week's complete schedule.

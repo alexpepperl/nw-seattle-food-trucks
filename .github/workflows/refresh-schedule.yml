@@ -2,7 +2,7 @@ name: Refresh weekly food truck schedule
 
 on:
   schedule:
-    - cron: "17 18 * * 1"
+    - cron: "17 18 * * *"
   workflow_dispatch:
   push:
     branches:
@@ -58,6 +58,16 @@ jobs:
           git commit -m "Refresh weekly food truck schedule"
           git push
 
+      - name: Resolve refresh alert
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Weekly food truck schedule refresh failed"
+          issue="$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number')"
+          if [ -n "$issue" ]; then
+            gh issue close "$issue" --comment "The full refresh succeeded in $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID."
+          fi
+
       - name: Report failed refresh
         if: failure()
         env:
@@ -65,7 +75,7 @@ jobs:
         run: |
           title="Weekly food truck schedule refresh failed"
           details="$(tail -n 30 refresh.log 2>/dev/null || true)"
-          body="$(printf 'The automated Monday refresh failed and did not publish partial data.\n\nRun: %s/%s/actions/runs/%s\n\n```\n%s\n```' "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" "$details")"
+          body="$(printf 'The automated full refresh failed and did not publish partial data.\n\nRun: %s/%s/actions/runs/%s\n\n```\n%s\n```' "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" "$details")"
           issue="$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number')"
           if [ -n "$issue" ]; then
             gh issue comment "$issue" --body "$body"

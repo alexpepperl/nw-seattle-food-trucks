@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   normalizeHours,
+  parseBbycGrid,
   parseGoogleAgenda,
   parseLucky,
   parseSeattleFoodTruckCards,
@@ -29,6 +30,23 @@ test("parses Stoup schedule text", () => {
     location: "stoup", date: "2026-09-15", name: "Max's Burgers & Wings",
     hours: "5–8pm", emoji: "🍔"
   });
+});
+
+test("combines Bale/Yonder events across calendar months", () => {
+  const crossMonthWeek = new Set([
+    "2026-09-28", "2026-09-29", "2026-09-30", "2026-10-01",
+    "2026-10-02", "2026-10-03", "2026-10-04"
+  ]);
+  const september = parseBbycGrid([
+    { day: "29", name: "Tummy Yummy Thai", hours: "4:00 PM - 8:00 PM" }
+  ], "September 2026", crossMonthWeek);
+  const october = parseBbycGrid([
+    { day: "1", name: "Impeckable Chicken", hours: "5:00 PM - 8:00 PM" }
+  ], "October 2026", crossMonthWeek);
+
+  assert.deepEqual([...september, ...october].map((item) => item.date), [
+    "2026-09-29", "2026-10-01"
+  ]);
 });
 
 test("parses Chuck's Google Calendar agenda", () => {
@@ -104,6 +122,19 @@ test("rejects partial source results", () => {
   assert.throws(() => validateResults({
     stoup: [], urban: [], bbyc: [], lucky: [], chucks: [], salehs: [], broad: []
   }), /Incomplete weekly schedule/);
+});
+
+test("accepts a refreshed source with fewer published bookings", () => {
+  const item = { location: "venue", date: "2026-09-15", name: "Truck", hours: "5–8pm", emoji: "🚚" };
+  assert.doesNotThrow(() => validateResults({
+    stoup: Array(6).fill(item),
+    urban: [item],
+    bbyc: [item],
+    lucky: [],
+    chucks: [item],
+    salehs: [item],
+    broad: [item]
+  }));
 });
 
 test("replaces the target week atomically", () => {

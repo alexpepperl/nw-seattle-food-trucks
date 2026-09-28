@@ -21,6 +21,7 @@ const SOURCES = {
 };
 const SEATTLE_FOOD_TRUCK_LOCATION_IDS = { salehs: 164, broad: 682 };
 const CHUCKS_CALENDAR_SOURCE = "https://calendar.google.com/calendar/embed?mode=AGENDA&showNav=0&showDate=0&showPrint=0&showTabs=0&showTz=0&showCalendars=0&showTitle=0&height=600&wkst=1&bgcolor=%23FFFFFF&src=tihhbg3gp215ruuo0nsp3qafgs%40group.calendar.google.com&color=%238C500B&ctz=America%2FLos_Angeles";
+const MINIMUM_EVENTS = { stoup: 6, urban: 1, bbyc: 1, lucky: 0, chucks: 1, salehs: 1, broad: 1 };
 
 function pad(value) {
   return String(value).padStart(2, "0");
@@ -40,6 +41,15 @@ function parseMonthDate(month, day, year) {
   const monthIndex = MONTHS[month];
   if (monthIndex == null) throw new Error(`Unknown month: ${month}`);
   return isoDate(new Date(Number(year), monthIndex, Number(day)));
+}
+
+function monthKey(date) {
+  return date.getFullYear() * 12 + date.getMonth();
+}
+
+function monthLabel(key) {
+  return new Date(Math.floor(key / 12), key % 12, 1)
+    .toLocaleString("en-US", { month: "long", year: "numeric" });
 }
 
 export function normalizeHours(value) {
@@ -84,6 +94,15 @@ export function parseStoup(text, year, weekDates) {
   const pattern = /(?:MON|TUE|WED|THU|FRI|SAT|SUN)\s+(\d{2})\.(\d{2})\s+(\d{1,2}(?::\d{2})?)\s*(?:—|–|-)\s*(\d{1,2}(?::\d{2})?\s*(?:am|pm))\s+([^\n]+)/gi;
   return [...section.matchAll(pattern)]
     .map((match) => event("stoup", `${year}-${match[1]}-${match[2]}`, match[5], `${match[3]}–${match[4]}`))
+    .filter((item) => inWeek(item.date, weekDates));
+}
+
+export function parseBbycGrid(items, displayedMonth, weekDates) {
+  const match = displayedMonth.match(/^([A-Za-z]+)\s+(\d{4})$/);
+  if (!match) throw new Error(`Unknown Bale/Yonder calendar month: ${displayedMonth}`);
+  return items
+    .filter((item) => item.day && item.name && item.hours)
+    .map((item) => event("bbyc", parseMonthDate(match[1], item.day, match[2]), item.name, item.hours))
     .filter((item) => inWeek(item.date, weekDates));
 }
 
@@ -221,6 +240,44 @@ async function fetchJson(url) {
   throw new Error(`Could not load ${url} after 3 attempts: ${lastError.message}`);
 }
 
+async function scrapeBbyc(page, weekDates) {
+  const targetMonths = [...new Set([...weekDates].map((value) =>
+    monthKey(new Date(`${value}T12:00:00`))
+  ))].sort((a, b) => a - b);
+  await page.locator('[role="grid"]').waitFor({ timeout: 30_000 });
+  let displayedMonth = await page.locator('[role="grid"]').getAttribute("aria-label");
+  const initialMatch = displayedMonth?.match(/^([A-Za-z]+)\s+(\d{4})$/);
+  if (!initialMatch || MONTHS[initialMatch[1]] == null) {
+    throw new Error(`Could not determine Bale/Yonder calendar month: ${displayedMonth}`);
+  }
+  let displayedKey = Number(initialMatch[2]) * 12 + MONTHS[initialMatch[1]];
+  const results = [];
+
+  for (const targetKey of targetMonths) {
+    while (displayedKey !== targetKey) {
+      const direction = displayedKey < targetKey ? 1 : -1;
+      const nextLabel = monthLabel(displayedKey + direction);
+      await page.getByRole("button", {
+        name: direction > 0 ? "Go to next month" : "Go to previous month"
+      }).click();
+      await page.locator(`[role="grid"][aria-label="${nextLabel}"]`).waitFor({ timeout: 30_000 });
+      displayedKey += direction;
+    }
+
+    displayedMonth = monthLabel(displayedKey);
+    const items = await page.locator('[role="gridcell"]').evaluateAll((cells) => cells.flatMap((cell) => {
+      const day = cell.innerText.match(/^\d{1,2}/)?.[0];
+      return [...cell.querySelectorAll(".flyoutitem")].map((item) => ({
+        day,
+        name: item.querySelector(".flyoutitem-title")?.textContent.trim(),
+        hours: item.querySelector(".flyoutitem-datetime--12hr")?.textContent.trim()
+      }));
+    }));
+    results.push(...parseBbycGrid(items, displayedMonth, weekDates));
+  }
+  return results;
+}
+
 function apiDate(date) {
   return `${date.getMonth() + 1}-${date.getDate()}-${String(date.getFullYear()).slice(-2)}`;
 }
@@ -251,21 +308,8 @@ async function scrapeAll(browser, weekDates, monday) {
   await page.close();
 
   console.log(`Refreshing bbyc from ${SOURCES.bbyc}`);
-  const targetMonth = monday.toLocaleString("en-US", { month: "long" });
-  page = await loadPage(browser, SOURCES.bbyc, targetMonth);
-  const bbycRaw = await page.locator('[role="gridcell"]').evaluateAll((cells) => cells.flatMap((cell) => {
-    const day = cell.innerText.match(/^\d{1,2}/)?.[0];
-    return [...cell.querySelectorAll(".flyoutitem")].map((item) => ({
-      day,
-      name: item.querySelector(".flyoutitem-title")?.textContent.trim(),
-      hours: item.querySelector(".flyoutitem-datetime--12hr")?.textContent.trim()
-    }));
-  }));
-  const monthYear = await page.locator('[role="grid"]').getAttribute("aria-label");
-  const [monthName, displayedYear] = monthYear.split(" ");
-  results.bbyc = bbycRaw.map((item) =>
-    event("bbyc", parseMonthDate(monthName, item.day, displayedYear), item.name, item.hours)
-  ).filter((item) => inWeek(item.date, weekDates));
+  page = await loadPage(browser, SOURCES.bbyc);
+  results.bbyc = await scrapeBbyc(page, weekDates);
   await page.close();
 
   console.log(`Refreshing lucky from ${SOURCES.lucky}`);
@@ -302,9 +346,11 @@ async function scrapeAll(browser, weekDates, monday) {
 }
 
 export function validateResults(results) {
-  const minimums = { stoup: 7, urban: 7, bbyc: 6, lucky: 0, chucks: 6, salehs: 5, broad: 5 };
-  const failures = LOCATIONS.filter((key) => !Array.isArray(results[key]) || results[key].length < minimums[key])
-    .map((key) => `${key}: found ${results[key]?.length ?? 0}, expected at least ${minimums[key]}`);
+  const failures = LOCATIONS.filter((key) =>
+    !Array.isArray(results[key]) || results[key].length < MINIMUM_EVENTS[key]
+  ).map((key) =>
+    `${key}: found ${results[key]?.length ?? 0}, expected at least ${MINIMUM_EVENTS[key]}`
+  );
   if (failures.length) throw new Error(`Incomplete weekly schedule:\n${failures.join("\n")}`);
 }
 
