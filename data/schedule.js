@@ -6,7 +6,7 @@
  * Dates with no entry render as "no listing" automatically.
  */
 window.FOOD_TRUCKS = {
-  updated: '2026-09-21',
+  updated: '2026-09-28',
 
   locations: {
     stoup:  { tag: 'Stoup',       name: 'Stoup',                 url: 'https://www.stoupbrewing.com/ballard/' },
@@ -209,27 +209,55 @@ window.FOOD_TRUCKS = {
       ['broad', '🚚', 'Levantine Cuisine', '4–8pm']
     ],
     '2026-09-28': [
-      ['stoup', '🦐', 'Where Ya At Matt', '5–8'],
-      ['urban', '🌮', 'La Riviera Maya',  '4–8']
+      ['stoup', '🍤', 'Where Ya At Matt', '5–8pm'],
+      ['urban', '🚚', 'La Riviera Maya', '4–8pm'],
+      ['chucks', '🌮', 'Birrieria Pepe El Toro', '5–9pm'],
+      ['salehs', '🥟', 'MOMO Express', '5–9pm'],
+      ['broad', '🥙', 'Mr. Gyros Food Truck', '4–8pm']
     ],
     '2026-09-29': [
-      ['stoup', '🍔', "Max's Burgers & Wings", '5–8'],
-      ['urban', '🥙', "Georgia's Greek",       '4–8']
+      ['stoup', '🍔', 'Max\'s Burgers & Wings', '5–8pm'],
+      ['urban', '🥙', 'Georgia\'s Greek', '4–8pm'],
+      ['bbyc', '🌮', 'Birrieria Pepe El Toro', '4–8pm'],
+      ['chucks', '🍖', 'Woodshop BBQ', '5–9pm'],
+      ['salehs', '🚚', 'Plaza Garcia Express', '5–9pm'],
+      ['broad', '🍗', 'Impeckable Chicken', '4–8pm']
     ],
     '2026-09-30': [
-      ['stoup', '🌮', 'El Gran Taco',       '4:30–8:30'],
-      ['urban', '🍗', 'Impeccable Chicken', '4–8']
+      ['stoup', '🌮', 'El Gran Taco', '4:30–8:30pm'],
+      ['urban', '🍗', 'Impeccable Chicken', '4–8pm'],
+      ['bbyc', '🥙', 'Georgia’s Greek', '4–8pm'],
+      ['chucks', '🍕', 'Oskar\'s Pizza', '5–9pm'],
+      ['salehs', '🥙', 'Theo\'s Gyros', '5–9pm'],
+      ['broad', '🥟', 'MOMO Express', '4–8pm']
     ],
     '2026-10-01': [
-      ['stoup', '🌮', 'Birrieria Pepe El Toro', '4–8'],
-      ['urban', '🌮', 'Alebrijes',              '4–8']
+      ['stoup', '🌮', 'Birrieria Pepe El Toro', '4–8pm'],
+      ['urban', '🚚', 'Alebrijes', '4–8pm'],
+      ['chucks', '🍕', 'Pizza Paesano', '5–9pm'],
+      ['salehs', '🚚', 'Fish Basket NW', '5–9pm'],
+      ['broad', '🚚', 'Plaza Garcia Express', '4–8pm']
     ],
     '2026-10-02': [
-      ['stoup', '🍤', 'El Sabor Boricua', '5–9'],
-      ['urban', '🌮', 'Tacos and Beer',   '4–8']
+      ['stoup', '🍤', 'El Sabor Boricua', '5–9pm'],
+      ['urban', '🌮', 'Tacos and Beer', '4–8pm'],
+      ['chucks', '🚚', 'T\'Juana', '5–9pm'],
+      ['salehs', '🍗', 'Impeckable Chicken', '5–9pm'],
+      ['broad', '🍕', 'Oskar\'s Pizza', '4–8pm']
     ],
     '2026-10-03': [
-      ['urban', '🍕', "Oskar's Pizza", '1–8']
+      ['stoup', '🚚', 'Tat\'s Truck', '1–7pm'],
+      ['urban', '🍕', 'Oskar\'s Pizza', '1–8pm'],
+      ['chucks', '🍤', 'Sabor Boricua', '12–8pm'],
+      ['salehs', '🍕', 'Oskar\'s Pizza', '5–9pm'],
+      ['broad', '🍜', 'Pumpkin Thai', '4–8pm']
+    ],
+    '2026-10-04': [
+      ['stoup', '🍜', 'Kaosamai Thai', '1–7pm'],
+      ['chucks', '🥟', 'Momo Express', '12–8pm'],
+      ['chucks', '🌶️', 'Cocina Barelas', '9–2pm'],
+      ['salehs', '🍜', 'Pumpkin Thai', '5–9pm'],
+      ['broad', '🥪', 'The Panini Truck', '4–8pm']
     ]
   }
 };
