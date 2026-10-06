@@ -6,7 +6,7 @@
  * Dates with no entry render as "no listing" automatically.
  */
 window.FOOD_TRUCKS = {
-  updated: '2026-10-05',
+  updated: '2026-10-06',
 
   locations: {
     stoup:  { tag: 'Stoup',       name: 'Stoup',                 url: 'https://www.stoupbrewing.com/ballard/' },
@@ -256,11 +256,7 @@ window.FOOD_TRUCKS = {
       ['broad', '🥪', 'The Panini Truck', '4–8pm']
     ],
     '2026-10-05': [
-      ['stoup', '🍕', 'Russo Pizzarium', '5–8pm'],
-      ['urban', '🥟', 'Empanadas El Pachi', '4–8pm'],
-      ['chucks', '🌮', 'Off the Rez', '5–9pm'],
-      ['salehs', '🥟', 'MOMO Express', '5–9pm'],
-      ['broad', '🥙', 'Mr. Gyros Food Truck', '4–8pm']
+      ['urban', '🥟', 'Empanadas El Pachi', '4–8pm']
     ],
     '2026-10-06': [
       ['stoup', '🌮', 'Tacos & Beer', '5–8pm'],
@@ -281,6 +277,7 @@ window.FOOD_TRUCKS = {
     '2026-10-08': [
       ['stoup', '🍜', 'Kottu Seattle', '5–8pm'],
       ['urban', '🍔', 'Burger Planet', '4–8pm'],
+      ['bbyc', '🍗', 'Impeckable Chicken', '4–8pm'],
       ['chucks', '🍕', 'Pizza Paesano', '5–9pm'],
       ['salehs', '🚚', 'Fish Basket NW', '5–9pm'],
       ['broad', '🚚', 'Plaza Garcia Express', '4–8pm']
@@ -303,7 +300,6 @@ window.FOOD_TRUCKS = {
     ],
     '2026-10-11': [
       ['stoup', '🥪', 'El Pirata Tortas Y Burritos / Now Make Me A Sandwich', '1–7pm'],
-      ['urban', '🍜', 'Kaosamai', '1–7pm'],
       ['urban', '🍩', '9th and Hennepin', '8–12pm'],
       ['bbyc', '🌮', 'Tacos & Beer', '1–8pm'],
       ['chucks', '🥙', 'Georgia\'s Greek', '4–9pm'],
