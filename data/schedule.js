@@ -6,7 +6,7 @@
  * Dates with no entry render as "no listing" automatically.
  */
 window.FOOD_TRUCKS = {
-  updated: '2026-10-13',
+  updated: '2026-10-19',
 
   locations: {
     stoup:  { tag: 'Stoup',       name: 'Stoup',                 url: 'https://www.stoupbrewing.com/ballard/' },
@@ -359,6 +359,63 @@ window.FOOD_TRUCKS = {
       ['chucks', '🌶️', 'Cocina Barelas', '9–2pm'],
       ['salehs', '🚚', 'Le Nomade', '5–9pm'],
       ['broad', '🚚', 'Gourmini\'s', '4–8pm']
+    ],
+    '2026-10-19': [
+      ['stoup', '🍕', 'Russo Pizzarium', '5–8pm'],
+      ['urban', '🥟', 'Empanadas El Pachi', '4–8pm'],
+      ['chucks', '🌮', 'Off the Rez', '5–9pm'],
+      ['salehs', '🥟', 'MOMO Express', '5–9pm'],
+      ['broad', '🥙', 'Mr. Gyros Food Truck', '4–8pm']
+    ],
+    '2026-10-20': [
+      ['stoup', '🌮', 'Tacos & Beer', '5–8pm'],
+      ['urban', '🍔', 'BurgerDOM', '4–8pm'],
+      ['bbyc', '🍕', 'Russo Pizzarium', '4–8pm'],
+      ['chucks', '🍜', 'Kaosamai Thai', '5–9pm'],
+      ['salehs', '🚚', 'Plaza Garcia Express', '5–9pm'],
+      ['broad', '🍗', 'Impeckable Chicken', '4–8pm']
+    ],
+    '2026-10-21': [
+      ['stoup', '🍗', 'Impeccable Chicken', '5–8pm'],
+      ['urban', '🥟', 'Katmandu Momocha', '4–8pm'],
+      ['bbyc', '🍔', 'Max’s Burgers & Wings', '4–8pm'],
+      ['chucks', '🚚', 'Chick\'n Fix', '5–9pm'],
+      ['salehs', '🥙', 'Theo\'s Gyros', '5–9pm'],
+      ['broad', '🥟', 'MOMO Express', '4–8pm']
+    ],
+    '2026-10-22': [
+      ['stoup', '🍜', 'Kottu Seattle', '5–8pm'],
+      ['urban', '🍔', 'Burger Planet', '4–8pm'],
+      ['bbyc', '🚚', 'Heart in Seoul', '4–8pm'],
+      ['chucks', '🍕', 'Pizza Paesano', '5–9pm'],
+      ['salehs', '🚚', 'Fish Basket NW', '5–9pm'],
+      ['broad', '🚚', 'Plaza Garcia Express', '4–8pm']
+    ],
+    '2026-10-23': [
+      ['stoup', '🌮', 'Off the Rez', '5–9pm'],
+      ['urban', '🌮', 'Birrieria Pepe El Toro', '4–8pm'],
+      ['bbyc', '🚚', 'WISEGUY ITALIAN', '4–8pm'],
+      ['chucks', '🚚', 'T\'Juana', '5–9pm'],
+      ['salehs', '🍗', 'Impeckable Chicken', '5–9pm'],
+      ['broad', '🍕', 'Oskar\'s Pizza', '4–8pm']
+    ],
+    '2026-10-24': [
+      ['stoup', '🥙', 'Georgia\'s Greek', '1–8pm'],
+      ['urban', '🥟', 'Momo Express', '1–8pm'],
+      ['bbyc', '🥪', 'Wich Came First', '1–8pm'],
+      ['chucks', '🚚', 'Tat\'s Deli', '12–7pm'],
+      ['salehs', '🍕', 'Oskar\'s Pizza', '5–9pm'],
+      ['broad', '🚚', 'Stanford\'s', '4–8pm']
+    ],
+    '2026-10-25': [
+      ['stoup', '🥪', 'El Pirata Tortas Y Burritos / Now Make Me A Sandwich', '1–7pm'],
+      ['urban', '🍜', 'Kaosamai', '1–7pm'],
+      ['urban', '🍩', '9th and Hennepin', '8–12pm'],
+      ['bbyc', '🌮', 'Tacos & Beer', '1–8pm'],
+      ['chucks', '🥙', 'Georgia\'s Greek', '4–9pm'],
+      ['chucks', '🌮', 'Good Morning Tacos', '9–3pm'],
+      ['salehs', '🍔', 'Burgerdom', '5–9pm'],
+      ['broad', '🚚', 'Le Nomade', '4–8pm']
     ]
   }
 };
