@@ -6,7 +6,7 @@
  * Dates with no entry render as "no listing" automatically.
  */
 window.FOOD_TRUCKS = {
-  updated: '2026-11-02',
+  updated: '2026-11-03',
 
   locations: {
     stoup:  { tag: 'Stoup',       name: 'Stoup',                 url: 'https://www.stoupbrewing.com/ballard/' },
@@ -464,15 +464,12 @@ window.FOOD_TRUCKS = {
       ['broad', '🚚', 'Gourmini\'s', '4–8pm']
     ],
     '2026-11-02': [
-      ['stoup', '🍕', 'Russo Pizzarium', '5–8pm'],
-      ['urban', '🥟', 'Empanadas El Pachi', '4–8pm'],
-      ['chucks', '🌮', 'Birrieria Pepe El Toro', '5–9pm'],
-      ['salehs', '🍜', 'Pumpkin Thai', '5–9pm'],
-      ['broad', '🥙', 'Mr. Gyros Food Truck', '4–8pm']
+      ['urban', '🥟', 'Empanadas El Pachi', '4–8pm']
     ],
     '2026-11-03': [
       ['stoup', '🌮', 'Tacos & Beer', '5–8pm'],
       ['urban', '🍔', 'BurgerDOM', '4–8pm'],
+      ['bbyc', '🌮', 'El Gran Taco', '4–8pm'],
       ['chucks', '🍖', 'Woodshop BBQ', '5–9pm'],
       ['salehs', '🚚', 'Plaza Garcia Express', '5–9pm'],
       ['broad', '🍜', 'Pumpkin Thai', '4–8pm']
